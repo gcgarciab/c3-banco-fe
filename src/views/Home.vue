@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
+    <h1>Usuario loggeado !!</h1>
     <HelloWorld msg="Prueba Vue Intensivo Ciclo 3"/>
   </div>
 </template>
