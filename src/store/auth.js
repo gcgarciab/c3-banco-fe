@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import jwtDecode from 'jwt-decode';
 import router from '../router';
 
 export const useAuthStore = defineStore('auth', {
@@ -21,7 +22,7 @@ export const useAuthStore = defineStore('auth', {
     }
   },
 
-  getter: {
-
+  getters: {
+    userId: (state) => jwtDecode(state.currentUser.access).user_id
   }
 })
