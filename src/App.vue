@@ -1,5 +1,5 @@
 <template>
-  <AppHeader/>
+  <AppHeader :user="authStore.currentUser" @logout="authStore.logout()" />
   <!-- <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> |
@@ -8,17 +8,39 @@
     <router-link to="/test">Test</router-link>
   </div> -->
 
-  <router-view/>
+  <router-view />
 </template>
 
 <script>
-import AppHeader from './components/AppHeader.vue'
+import AppHeader from "./components/AppHeader.vue";
+import { useAuthStore } from "./store/auth";
 
 export default {
   components: {
-    AppHeader
-  }
-}
+    AppHeader,
+  },
+
+  data() {
+    return {
+      authStore: useAuthStore(),
+    };
+  },
+
+  created() {
+    const access = localStorage.getItem("access");
+
+    if (access) {
+      this.authStore.$patch({
+        currentUser: {
+          access,
+          refresh: localStorage.getItem("refresh"),
+        },
+      });
+    } else {
+      this.$router.push({ name: "SignIn" });
+    }
+  },
+};
 </script>
 
 <style>

@@ -1,45 +1,27 @@
 <template>
-  <section class="register">
-    <form
-      class="auth-form"
-      @submit.prevent="createUser()"
-    >
-      <h2 class="form-title">Crear cuenta</h2>
+  <section class="auth">
+    <form class="auth-form" @submit.prevent="createProduct()">
+      <h2 class="form-title">Crear Cuenta</h2>
 
       <div class="form-input">
-        <input 
-          type="text" 
-          placeholder="Username" 
-          v-model="user.username"
-        >
+        <label>Username:</label>
+        <input type="text" placeholder="Username" v-model="user.username" />
       </div>
       <div class="form-input">
-        <input 
-          type="text" 
-          placeholder="Password"
-          v-model="user.password"
-        >
+        <label>Password:</label>
+        <input type="text" placeholder="Password" v-model="user.password" />
       </div>
       <div class="form-input">
-        <input 
-          type="text" 
-          placeholder="Name"
-          v-model="user.name"
-        >
+        <label>Name:</label>
+        <input type="text" placeholder="Name" v-model="user.name" />
       </div>
       <div class="form-input">
-        <input 
-          type="email" 
-          placeholder="Email"
-          v-model="user.email"
-        >
+        <label>Email:</label>
+        <input type="email" placeholder="Email" v-model="user.email" />
       </div>
       <div class="form-input">
-        <input 
-          type="number" 
-          placeholder="Balance"
-          v-model="balance"
-        >
+        <label>Balance:</label>
+        <input type="number" placeholder="Balance" v-model="balance" />
       </div>
 
       <button type="submit">Registrarme</button>
@@ -48,19 +30,29 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
+import NProgress from "nprogress";
+import { useAuthStore } from "../store/auth";
 
 export default {
   data() {
     return {
+      authStore: useAuthStore(),
+
       user: {
-        username: '',
-        password: '',
-        name: '',
-        email: '',
+        username: "",
+        password: "",
+        name: "",
+        email: "",
       },
       balance: 0,
-    }
+
+      product: {
+        name: "",
+        price: 0,
+        quantity: 0,
+      },
+    };
   },
 
   methods: {
@@ -70,22 +62,21 @@ export default {
         account: {
           lastChangeDate: new Date().toISOString(),
           balance: this.balance,
-          isActive: true
-        }
-      }
-      console.log('Crear usuario', user)
+          isActive: true,
+        },
+      };
+
+      NProgress.start();
       axios
-        .post('https://intensivo3-banco-be.herokuapp.com/user/', user)
+        .post("https://intensivo3-banco-be.herokuapp.com/user/", user)
         .then((response) => {
-          console.log(response)
-          localStorage.setItem('access', response.data.access)
-          localStorage.setItem('refresh', response.data.refresh)
-          this.$router.push({ name: 'Home' })
+          this.authStore.setUser(response.data);
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
         })
-    }
-  }
-}
+        .then(() => NProgress.done());
+    },
+  },
+};
 </script>
