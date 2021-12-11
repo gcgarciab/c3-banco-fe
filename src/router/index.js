@@ -3,6 +3,8 @@ import Home from '../views/Home.vue'
 import Test from '../views/Test.vue'
 import SignIn from '@/views/SignIn.vue'
 import Register from '@/views/Register.vue'
+import Pokemons from '@/views/Pokemons.vue'
+import PokemonDetail from '@/views/PokemonDetail.vue'
 
 const routes = [
   {
@@ -32,6 +34,16 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/pokemons',
+    name: 'Pokemons',
+    component: Pokemons
+  },
+  {
+    path: '/pokemon/:id',
+    name: 'PokemonDetail',
+    component: PokemonDetail
   },
 ]
 
